@@ -1,27 +1,30 @@
 # Sequelize Version 4 Association Examples
 
 ## Sequelize
+
 Sequelize is a SQL ORM for those developing in Node. This repo is a set of tutorials showing concrete examples of how the ORM works with defining associations and querying based on those associations. The examples provided are intentionally simplistic and focused on demonstrating what Sequelize is capable of.
 
 I've chosen to use a PostgreSQL DB for these examples but Sequelize does offer support for [other DBs](http://docs.sequelizejs.com/manual/installation/getting-started.html) as well:
 
-  - PostgreSQL
-  - MySQL2
-  - SQLite3
-  - Tedious
+- PostgreSQL
+- MySQL2
+- SQLite3
+- Tedious
 
 ## Before We Start
+
 Lets take a look at the tools and technologies we will be using:
 
-- [Node](https://nodejs.org/en/) **v8.9.4** - We're going to use this to run JavaScript code on the server.
+- [Node](https://nodejs.org/en/) **v14.17.3** - We're going to use this to run JavaScript code on the server.
 
-- [Express](https://expressjs.com/) **v4.13.4** - As their website states, Express is a "Fast, unopinionated, minimalist web framework for Node.js". If you've been in the Node community for any time at all you should be familiar with how wonderful Express is.  If you are new - then welcome!
+- [Express](https://expressjs.com/) **v4.13.4** - As their website states, Express is a "Fast, unopinionated, minimalist web framework for Node.js". If you've been in the Node community for any time at all you should be familiar with how wonderful Express is. If you are new - then welcome!
 
-- [PostgreSQL](https://www.postgresql.org/docs/9.6/static/index.html) **v9.6.5** - Powerful open-source database that we're going to use for all of our tutorials. Unfortunately, details on how to install and configure PostgreSQL on your particular system are out of the scope of what this tutorial will cover.  That being said if you find yourself using a Mac - I have a few recommondations on complimentary tools that I have found useful.
-	- [Postgres App](https://postgresapp.com/) - this app hosts the local server off of which PostgreSQL will run on your local machine.  Super easy to setup, just follow their instructions and you are off to the races.
-	- [Postico](https://eggerapps.at/postico/) - this app is a GUI that allows you to create databases, perform CRUD operations inside of databases and view data within databases to ensure that your data is in fact persisting the way you intend it to.
+- [PostgreSQL](https://www.postgresql.org/docs/9.6/static/index.html) **v14.2** - Powerful open-source database that we're going to use for all of our tutorials. Unfortunately, details on how to install and configure PostgreSQL on your particular system are out of the scope of what this tutorial will cover. That being said if you find yourself using a Mac - I have a few recommondations on complimentary tools that I have found useful.
 
-- [Sequelize](http://docs.sequelizejs.com/) **v4.35.0** - The reason we are all here.  If you haven't heard of it by now then you're in the wrong tutorial.
+  - [Postgres App](https://postgresapp.com/) - this app hosts the local server off of which PostgreSQL will run on your local machine. Super easy to setup, just follow their instructions and you are off to the races.
+  - [Postico](https://eggerapps.at/postico/) - this app is a GUI that allows you to create databases, perform CRUD operations inside of databases and view data within databases to ensure that your data is in fact persisting the way you intend it to.
+
+- [Sequelize](http://docs.sequelizejs.com/) **v4.35.0** - The reason we are all here. If you haven't heard of it by now then you're in the wrong tutorial.
 
 - [Sequelize-CLI](https://github.com/sequelize/cli) **v4.0.0** - A wonderful CLI tool to interface with sequelize. Go ahead and install this onto your machine by typing `npm install -g sequelize-cli` into your CLI
 
@@ -36,16 +39,19 @@ This tutorial assumes an understanding of:
 - CLI
 
 ## Tutorials
+
 Each folder has its own echo system designed to show one association each. Tutorials and explanations provided for each folder below.
+
 > NOTE: Each tutorial builds off the one before it so its recommended you do them in order to get the most.
 
-  - [Overview](https://github.com/williampruden/sequelize-associations#overview)
-  - [One-To-Many](https://github.com/williampruden/sequelize-associations/tree/master/01_one-to-many)
-  - [Zero-To-Many](https://github.com/williampruden/sequelize-associations/tree/master/02_zero-to-many)
-  - [One-To-One](https://github.com/williampruden/sequelize-associations/tree/master/03_one-to-one)
-  - [Many-To-Many](https://github.com/williampruden/sequelize-associations/tree/master/04_many-to-many)
+- [Overview](https://github.com/williampruden/sequelize-associations#overview)
+- [One-To-Many](https://github.com/williampruden/sequelize-associations/tree/master/01_one-to-many)
+- [Zero-To-Many](https://github.com/williampruden/sequelize-associations/tree/master/02_zero-to-many)
+- [One-To-One](https://github.com/williampruden/sequelize-associations/tree/master/03_one-to-one)
+- [Many-To-Many](https://github.com/williampruden/sequelize-associations/tree/master/04_many-to-many)
 
 ## Overview
+
 If you are familiar with Sequelize and wish to download the repo and play with the existing code then you will need to do the following in order to get the projects up and running.
 
 - create a database on your machine that matches the development url in `./config/config.json`
@@ -54,7 +60,7 @@ If you are familiar with Sequelize and wish to download the repo and play with t
 - run `npm start` in your CLI
 - Peek at some of the association specific tutorials as they will help provide clarity on how each one works.
 
-If the instructions above are confusing, fear not, we are going to start from scratch to give you an idea of how to build these apps from the ground up.  
+If the instructions above are confusing, fear not, we are going to start from scratch to give you an idea of how to build these apps from the ground up.
 
 Please clone the [Node-Simple-Starter](https://github.com/williampruden/node-simple-starter) repository as this will be our base for each of our apps.
 
@@ -65,7 +71,7 @@ Please clone the [Node-Simple-Starter](https://github.com/williampruden/node-sim
 
 `pg` will be responsible for creating the database connection while `pg-hstore` is for serializing and deserializing JSON data into the Postgres hstore format and `sequelize` is our ORM... but you already knew that. If you plan on using a DB other than PostgreSQL please refer to the [sequelize docs](http://docs.sequelizejs.com/manual/installation/getting-started.html) for what to install.
 
-Now that our Node app is up and running we can focus on why we are all here - Sequelize! With our `sequelize-cli` installed globally and `sequelize` installed locally to our project we can now run our first sequelize command. In your CLI run `sequelize init` and notice what happens. It has added the folders `config`, `models`, `migrations`, and `seeders` along with a few other files which we will explore in a bit.  Quick sanity check - our file structure should look like this:
+Now that our Node app is up and running we can focus on why we are all here - Sequelize! With our `sequelize-cli` installed globally and `sequelize` installed locally to our project we can now run our first sequelize command. In your CLI run `sequelize init` and notice what happens. It has added the folders `config`, `models`, `migrations`, and `seeders` along with a few other files which we will explore in a bit. Quick sanity check - our file structure should look like this:
 
 ```bash
 .
@@ -89,13 +95,13 @@ Now that our Node app is up and running we can focus on why we are all here - Se
 It's worth mentioning that `sequelize init` will not generate a [.sequelizerc](http://docs.sequelizejs.com/manual/tutorial/migrations.html#the-sequelizerc-file) file in the root of our application. The `sequelize-cli` needs this file in order to know where certain files and folders are located within our project. Go ahead and create a `.sequelizerc` file in the root of the application and add the following code:
 
 ```javascript
-var path = require('path');
+var path = require("path");
 
 module.exports = {
-  'config': path.resolve('./', 'config/config.json'),
-  'migrations-path': path.resolve('./', 'migrations'),
-  'seeders-path': path.resolve('./', 'seeders'),
-  'models-path': path.resolve('./', 'models')
+  config: path.resolve("./", "config/config.json"),
+  "migrations-path": path.resolve("./", "migrations"),
+  "seeders-path": path.resolve("./", "seeders"),
+  "models-path": path.resolve("./", "models"),
 };
 ```
 
@@ -106,33 +112,39 @@ We will see the benefits of `.sequelizerc` a little later but for now lets explo
 `./models/index.js` should look like this:
 
 ```javascript
-'use strict';
+"use strict";
 
-var fs        = require('fs');
-var path      = require('path');
-var Sequelize = require('sequelize');
-var basename  = path.basename(__filename);
-var env       = process.env.NODE_ENV || 'development';
-var config    = require(__dirname + '/../config/config.json')[env];
-var db        = {};
+var fs = require("fs");
+var path = require("path");
+var Sequelize = require("sequelize");
+var basename = path.basename(__filename);
+var env = process.env.NODE_ENV || "development";
+var config = require(__dirname + "/../config/config.json")[env];
+var db = {};
 
 if (config.use_env_variable) {
   var sequelize = new Sequelize(process.env[config.use_env_variable], config);
 } else {
-  var sequelize = new Sequelize(config.database, config.username, config.password, config);
+  var sequelize = new Sequelize(
+    config.database,
+    config.username,
+    config.password,
+    config
+  );
 }
 
-fs
-  .readdirSync(__dirname)
-  .filter(file => {
-    return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
+fs.readdirSync(__dirname)
+  .filter((file) => {
+    return (
+      file.indexOf(".") !== 0 && file !== basename && file.slice(-3) === ".js"
+    );
   })
-  .forEach(file => {
-    var model = sequelize['import'](path.join(__dirname, file));
+  .forEach((file) => {
+    var model = sequelize["import"](path.join(__dirname, file));
     db[model.name] = model;
   });
 
-Object.keys(db).forEach(modelName => {
+Object.keys(db).forEach((modelName) => {
   if (db[modelName].associate) {
     db[modelName].associate(db);
   }
@@ -179,6 +191,7 @@ Summary of what is happening here:
 }
 
 ```
+
 I refactor mine to look more like this:
 
 ```javascript
@@ -201,7 +214,8 @@ I refactor mine to look more like this:
   }
 }
 ```
-Notice we changed the `dialect` to match our DB.  Again if you chose a different DB, then please specify the `dialect` that suits your project here. The `url` property contains all the details needed to connect to the DB. The only other change that then needs to take place now is in our `./models/index.js` file.  We need to read that `url` property instead of the `database`, `username`, and `password`.
+
+Notice we changed the `dialect` to match our DB. Again if you chose a different DB, then please specify the `dialect` that suits your project here. The `url` property contains all the details needed to connect to the DB. The only other change that then needs to take place now is in our `./models/index.js` file. We need to read that `url` property instead of the `database`, `username`, and `password`.
 
 ```javascript
 ...
@@ -215,7 +229,7 @@ if (config.use_env_variable) {
 ...
 ```
 
-Now all we need to do is create a DB and establish our connection. If PostgreSQL is installed you should be able to run the command `createdb sql-otm-dev` and this will create our db `sql-otm-dev`.  If you have [Postico](https://eggerapps.at/postico/) working then you can also create a DB this way.
+Now all we need to do is create a DB and establish our connection. If PostgreSQL is installed you should be able to run the command `createdb sql-otm-dev` and this will create our db `sql-otm-dev`. If you have [Postico](https://eggerapps.at/postico/) working then you can also create a DB this way.
 
 <img src="https://i.imgur.com/baaL7Ai.gif" />
 
