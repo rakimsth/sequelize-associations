@@ -1,0 +1,20 @@
+{
+  "name": "sequelize--one-to-many",
+  "version": "1.0.0",
+  "author": "William Pruden",
+  "scripts": {
+    "start": "node ./bin/www",
+    "migrate": "sequelize db:migrate"
+  },
+  "dependencies": {
+    "body-parser": "~1.15.1",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.2.0",
+    "express": "~4.13.4",
+    "morgan": "~1.7.0",
+    "pg": "7.4.3",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^4.35.0",
+    "serve-favicon": "~2.3.0"
+  }
+}
